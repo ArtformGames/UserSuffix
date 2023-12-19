@@ -1,0 +1,17 @@
+main: ${project.package}.Main
+name: ${project.name}
+
+version: ${project.version}
+description: ${project.description}
+website: ${project.url}
+
+authors:
+  - ArtformGames
+
+api-version: 1.16
+
+depend:
+  - ArtCore
+
+softdepend:
+  - PlaceholderAPI
