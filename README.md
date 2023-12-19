@@ -27,22 +27,19 @@ see  [Dependencies](https://github.com/ArtformGames/UserSuffix/network/dependenc
 The main command is `/UserSuffix` or `/title`.
 
 ```text
-# content <Content>
+# set <Content> [Color]
 @ User command
 - Set the title of yourself.
-
-# color <Color>
-@ User command
-- Set the color of the title blanket of yourself.
 
 # clear <player-name>
 @ Admin command
 - Clear the title of the player.
 
-# set <player-name> <title> <color>
+# apply <player-name> <title> [color]
 @ Admin command
 - Set the title of the player.
 ```
+
 
 ## Configurations
 

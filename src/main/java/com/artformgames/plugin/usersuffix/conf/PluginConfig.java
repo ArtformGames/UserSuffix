@@ -17,16 +17,16 @@ public class PluginConfig extends ConfigurationRoot {
     })
     public static final ConfiguredValue<Boolean> CHECK_UPDATE = ConfiguredValue.of(Boolean.class, true);
 
-    @HeaderComment("Suffix")
+    @HeaderComment("Suffix weight in LuckPerms")
     public static final ConfigValue<Integer> WEIGHT = ConfiguredValue.of(Integer.class, 1);
 
-    @HeaderComment({"后缀格式，其中“%s”将被替换为后缀内容。"})
+    @HeaderComment({"Suffix format. The `%(suffix)` will be replaced with the suffix content."})
     public static final ConfigValue<String> FORMAT = ConfiguredValue.of(String.class, " %(color)[%(suffix)%(color)]");
 
-    @HeaderComment("后缀格式部分的默认颜色。")
+    @HeaderComment("The default color for the suffix format section.")
     public static final ConfigValue<String> DEFAULT_COLOR = ConfiguredValue.of(String.class, "&7");
 
-    @HeaderComment("后缀名的最大长度(不包括颜色符号)")
+    @HeaderComment("Maximum length of the suffix (excluding color symbols)")
     public static final ConfigValue<Integer> MAX_LENGTH = ConfiguredValue.of(Integer.class, 8);
 
 }

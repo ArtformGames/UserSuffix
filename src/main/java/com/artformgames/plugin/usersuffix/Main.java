@@ -2,9 +2,14 @@ package com.artformgames.plugin.usersuffix;
 
 import cc.carm.lib.easyplugin.EasyPlugin;
 import cc.carm.lib.mineconfiguration.bukkit.MineConfiguration;
+import com.artformgames.core.ArtCore;
 import com.artformgames.core.utils.GHUpdateChecker;
+import com.artformgames.plugin.usersuffix.command.UserSuffixCommands;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
 import com.artformgames.plugin.usersuffix.conf.PluginMessages;
+import com.artformgames.plugin.usersuffix.user.SuffixAccount;
+import dev.rollczi.litecommands.LiteCommands;
+import org.bukkit.command.CommandSender;
 
 public class Main extends EasyPlugin {
 
@@ -15,23 +20,24 @@ public class Main extends EasyPlugin {
     }
 
     protected MineConfiguration configuration;
+    protected LiteCommands<CommandSender> commands;
 
     @Override
-    protected void load() {
+    @SuppressWarnings("UnstableApiUsage")
+    protected boolean initialize() {
 
         log("Loading plugin configurations...");
         configuration = new MineConfiguration(this);
         configuration.initializeConfig(PluginConfig.class);
         configuration.initializeMessage(PluginMessages.class);
-    }
 
-    @Override
-    protected boolean initialize() {
 
-        log("Register listeners...");
+        log("Register handlers...");
+        ArtCore.getUserManager().registerHandler(this, SuffixAccount.class, SuffixAccount::new);
 
         log("Register commands...");
-
+        this.commands = ArtCore.createCommand().commands(UserSuffixCommands.class).build();
+        this.commands.register();
 
         if (PluginConfig.CHECK_UPDATE.getNotNull()) {
             log("Start to check the plugin versions...");
@@ -41,13 +47,6 @@ public class Main extends EasyPlugin {
         }
 
         return true;
-    }
-
-    @Override
-    protected void shutdown() {
-
-        log("Shutting down...");
-
     }
 
     @Override
