@@ -14,14 +14,14 @@
         <deps.core.version>1.0.0</deps.core.version>
     </properties>
     <groupId>com.artformgames</groupId>
-    <artifactId>TemplateSinglePlugin</artifactId>
+    <artifactId>usersuffix</artifactId>
     <version>1.0.0</version>
 
-    <name>TemplateSinglePlugin</name>
+    <name>UserSuffix</name>
     <description>
-
+        Simple user suffix plugin, support customizing titles by commands.
     </description>
-    <url>https://github.com/ArtformGames/TemplateSinglePlugin</url>
+    <url>https://github.com/ArtformGames/UserSuffix</url>
 
     <developers>
         <developer>
@@ -50,20 +50,20 @@
 
     <ciManagement>
         <system>GitHub Actions</system>
-        <url>https://github.com/ArtformGames/TemplateSinglePlugin/actions/workflows/maven.yml</url>
+        <url>https://github.com/ArtformGames/UserSuffix/actions/workflows/maven.yml</url>
     </ciManagement>
 
     <distributionManagement>
-        <downloadUrl>https://github.com/ArtformGames/TemplateSinglePlugin/releases</downloadUrl>
+        <downloadUrl>https://github.com/ArtformGames/UserSuffix/releases</downloadUrl>
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/ArtformGames/TemplateSinglePlugin</url>
+            <url>https://maven.pkg.github.com/ArtformGames/UserSuffix</url>
         </repository>
         <snapshotRepository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/ArtformGames/TemplateSinglePlugin</url>
+            <url>https://maven.pkg.github.com/ArtformGames/UserSuffix</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -109,6 +109,13 @@
             <groupId>com.artformgames</groupId>
             <artifactId>artcore-api</artifactId>
             <version>${deps.core.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.4</version>
             <scope>provided</scope>
         </dependency>
 

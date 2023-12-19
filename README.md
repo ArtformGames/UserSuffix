@@ -4,38 +4,44 @@
 
 README LANGUAGES [ [**English**](README.md) | [中文](README_CN.md)  ]
 
-![CodeSize](https://img.shields.io/github/languages/code-size/ArtformGames/TemplateSinglePlugin)
-[![Download](https://img.shields.io/github/downloads/ArtformGames/TemplateSinglePlugin/total)](https://github.com/ArtformGames/TemplateSinglePlugin/releases)
-[![Java CI with Maven](https://github.com/ArtformGames/TemplateSinglePlugin/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/ArtformGames//actions/workflows/maven.yml)
+![CodeSize](https://img.shields.io/github/languages/code-size/ArtformGames/UserSuffix)
+[![Download](https://img.shields.io/github/downloads/ArtformGames/UserSuffix/total)](https://github.com/ArtformGames/UserSuffix/releases)
+[![Java CI with Maven](https://github.com/ArtformGames/UserSuffix/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/ArtformGames//actions/workflows/maven.yml)
 ![Support](https://img.shields.io/badge/Minecraft-Java%201.16--Latest-green)
 
-# **TemplateSinglePlugin**
+# **UserSuffix**
 
-> Slogan
-
-Descriptions
-
-## Features & Advantages
-
-## Screenshots
+Simple user title plugin, support customizing titles by commands.
 
 ## Dependencies
 
+- **[Necessary]** Develop based on [ArtCore](https://github.com/ArtformGames/ArtCore) .
+- **[Necessary]** Suffix based on [LuckPerms]() .
 - **[Recommend]** Placeholders based on [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) .
 
 For development dependencies, please
-see  [Dependencies](https://github.com/ArtformGames/TemplateSinglePlugin/network/dependencies) .
+see  [Dependencies](https://github.com/ArtformGames/UserSuffix/network/dependencies) .
 
 ## Commands
 
-The main command is `/TemplateSinglePlugin` or `/tsp`.
+The main command is `/UserSuffix` or `/title`.
 
 ```text
+# content <Content>
+@ User command
+- Set the title of yourself.
 
-# subcommand <force-arg> <optional-arg>
-@ Player command
-- Description
+# color <Color>
+@ User command
+- Set the color of the title blanket of yourself.
 
+# clear <player-name>
+@ Admin command
+- Clear the title of the player.
+
+# set <player-name> <title> <color>
+@ Admin command
+- Set the title of the player.
 ```
 
 ## Configurations
@@ -51,8 +57,11 @@ Will be generated on the first boot up.
 ## Permissions
 
 ```text
-# TemplateSinglePlugin.admin
+# UserSuffix.admin
 - The permissions for all admin commands and functions.
+
+# UserSuffix.use
+- The permissions to use main command.
 ```
 
 ## Statistics
@@ -68,5 +77,5 @@ The source code of this project adopts the [GNU General Public License v3.0](htt
 This project is mainly developed by the [Artfrom Games](https://github.com/ArtformGames/) .
 
 Many thanks to Jetbrains for kindly providing a license for us to work on this and other open-source projects.  
-[![](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/ArtformGames/TemplateSinglePlugin)
+[![](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/ArtformGames/UserSuffix)
 

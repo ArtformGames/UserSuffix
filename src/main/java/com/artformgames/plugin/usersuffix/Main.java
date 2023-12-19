@@ -1,11 +1,10 @@
-package com.artformgames.plugin.template;
+package com.artformgames.plugin.usersuffix;
 
 import cc.carm.lib.easyplugin.EasyPlugin;
 import cc.carm.lib.mineconfiguration.bukkit.MineConfiguration;
 import com.artformgames.core.utils.GHUpdateChecker;
-import com.artformgames.plugin.template.conf.PluginConfig;
-import com.artformgames.plugin.template.conf.PluginMessages;
-import org.bstats.bukkit.Metrics;
+import com.artformgames.plugin.usersuffix.conf.PluginConfig;
+import com.artformgames.plugin.usersuffix.conf.PluginMessages;
 
 public class Main extends EasyPlugin {
 
@@ -33,11 +32,6 @@ public class Main extends EasyPlugin {
 
         log("Register commands...");
 
-
-        if (PluginConfig.METRICS.getNotNull()) {
-            log("Initializing bStats...");
-            new Metrics(this, 0);
-        }
 
         if (PluginConfig.CHECK_UPDATE.getNotNull()) {
             log("Start to check the plugin versions...");
