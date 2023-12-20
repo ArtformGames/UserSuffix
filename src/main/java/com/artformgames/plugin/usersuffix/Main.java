@@ -8,6 +8,7 @@ import com.artformgames.plugin.usersuffix.command.UserSuffixCommands;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
 import com.artformgames.plugin.usersuffix.conf.PluginMessages;
 import com.artformgames.plugin.usersuffix.user.SuffixAccount;
+import com.artformgames.plugin.usersuffix.user.SuffixLoader;
 import dev.rollczi.litecommands.LiteCommands;
 import org.bukkit.command.CommandSender;
 
@@ -31,9 +32,8 @@ public class Main extends EasyPlugin {
         configuration.initializeConfig(PluginConfig.class);
         configuration.initializeMessage(PluginMessages.class);
 
-
         log("Register handlers...");
-        ArtCore.getUserManager().registerHandler(this, SuffixAccount.class, SuffixAccount::new);
+        ArtCore.getUserManager().registerHandler(new SuffixLoader(this));
 
         log("Register commands...");
         this.commands = ArtCore.createCommand().commands(UserSuffixCommands.class).build();

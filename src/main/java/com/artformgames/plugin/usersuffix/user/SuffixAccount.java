@@ -1,33 +1,70 @@
 package com.artformgames.plugin.usersuffix.user;
 
+import cc.carm.lib.easyplugin.utils.ColorParser;
 import com.artformgames.core.user.User;
 import com.artformgames.core.user.handler.AbstractUserHandler;
 import com.artformgames.core.user.handler.UserHandler;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
-import com.artformgames.plugin.usersuffix.manager.ServiceManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class SuffixAccount extends AbstractUserHandler implements UserHandler {
-    public SuffixAccount(User user) {
+    public static final Pattern ALLOWED_CODES = Pattern.compile("[\\da-f]+");
+
+    public static boolean validColor(String code) {
+        return ALLOWED_CODES.matcher(code).matches();
+    }
+
+
+    protected @Nullable String content;
+    protected @Nullable ChatColor color;
+
+    public SuffixAccount(User user, @Nullable String content, @Nullable ChatColor color) {
         super(user);
+        this.content = content;
+        this.color = color;
     }
 
     protected Optional<Player> getPlayer() {
         return Optional.ofNullable(Bukkit.getPlayer(getUser().getUserUUID()));
     }
 
-    public String getSuffix() {
-        return getPlayer().map(ServiceManager::getSuffix).orElse(null);
+    public @Nullable ChatColor getColor() {
+        return color;
     }
 
-    public void setSuffix(@Nullable String suffix) {
-        getPlayer().ifPresent(player -> ServiceManager.setSuffixData(
-                player, suffix, PluginConfig.WEIGHT.getNotNull()
-        ));
+    public @Nullable String getContent() {
+        return content;
+    }
+
+    public void setColor(@Nullable ChatColor color) {
+        this.color = color;
+    }
+
+    public void setContent(@Nullable String content) {
+        this.content = content;
+    }
+
+    public @Nullable String getSuffix() {
+        if (this.content == null) return null;
+        return ColorParser.parse(PluginConfig.FORMAT.getNotNull()
+                .replace("%(color)", getColorCode())
+                .replace("%(suffix)", this.content));
+    }
+
+    protected @NotNull String getColorCode() {
+        return this.color != null ? "&" + this.color.getChar() : PluginConfig.DEFAULT_COLOR.getNotNull();
+    }
+
+    public void setSuffix(@Nullable String content, @Nullable ChatColor color) {
+        this.content = content;
+        this.color = color;
     }
 
 }

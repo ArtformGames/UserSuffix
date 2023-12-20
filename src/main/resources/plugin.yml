@@ -16,3 +16,7 @@ depend:
 
 softdepend:
   - PlaceholderAPI
+
+permissions:
+  "usersuffix.use":
+    default: true

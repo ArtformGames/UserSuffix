@@ -30,16 +30,7 @@ The main command is `/UserSuffix` or `/title`.
 # set <Content> [Color]
 @ User command
 - Set the title of yourself.
-
-# clear <player-name>
-@ Admin command
-- Clear the title of the player.
-
-# apply <player-name> <title> [color]
-@ Admin command
-- Set the title of the player.
 ```
-
 
 ## Configurations
 
@@ -54,9 +45,6 @@ Will be generated on the first boot up.
 ## Permissions
 
 ```text
-# UserSuffix.admin
-- The permissions for all admin commands and functions.
-
 # UserSuffix.use
 - The permissions to use main command.
 ```
