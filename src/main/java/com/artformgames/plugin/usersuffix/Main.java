@@ -7,9 +7,10 @@ import com.artformgames.core.utils.GHUpdateChecker;
 import com.artformgames.plugin.usersuffix.command.UserSuffixCommands;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
 import com.artformgames.plugin.usersuffix.conf.PluginMessages;
-import com.artformgames.plugin.usersuffix.user.SuffixAccount;
+import com.artformgames.plugin.usersuffix.hooker.SuffixPlaceholder;
 import com.artformgames.plugin.usersuffix.user.SuffixLoader;
 import dev.rollczi.litecommands.LiteCommands;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 public class Main extends EasyPlugin {
@@ -29,8 +30,8 @@ public class Main extends EasyPlugin {
 
         log("Loading plugin configurations...");
         configuration = new MineConfiguration(this);
-        configuration.initializeConfig(PluginConfig.class);
-        configuration.initializeMessage(PluginMessages.class);
+        configuration.getConfigProvider().initialize(PluginConfig.class);
+        configuration.getMessageProvider().initialize(PluginMessages.class);
 
         log("Register handlers...");
         ArtCore.getUserManager().registerHandler(new SuffixLoader(this));
@@ -44,6 +45,14 @@ public class Main extends EasyPlugin {
             getScheduler().runAsync(GHUpdateChecker.runner(this));
         } else {
             log("Version checker is disabled, skipped.");
+        }
+
+
+        log("Register placeholders...");
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new SuffixPlaceholder(this, getName());
+        } else {
+            log("PlaceholderAPI is not enabled, skipped.");
         }
 
         return true;

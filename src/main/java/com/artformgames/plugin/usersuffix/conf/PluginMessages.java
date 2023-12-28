@@ -7,7 +7,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public class PluginMessages extends MessagesRoot {
 
     public static final ConfiguredMessageList<BaseComponent[]> CLEARED = list()
-            .defaults("&f The existing suffix has been cleared for you. To set up, enter &e/suffix <content> &f.")
+            .defaults("&fThe existing suffix has been cleared for you. To set up again, enter &e/suffix content <content> &f.")
             .build();
 
     public static final ConfiguredMessageList<BaseComponent[]> TOO_LONG = list()
@@ -37,7 +37,11 @@ public class PluginMessages extends MessagesRoot {
             .build();
 
     public static final ConfiguredMessageList<BaseComponent[]> INVALID_COLOR_CODE = list()
-            .defaults("&fYour color code is invalid!")
-            .build();
+            .defaults(
+                    "&fYour color is invalid!",
+                    "&fYou can choose from the following colors:"
+            ).build();
+
+
 
 }

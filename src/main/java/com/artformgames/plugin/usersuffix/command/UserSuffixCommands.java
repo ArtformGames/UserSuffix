@@ -1,5 +1,7 @@
 package com.artformgames.plugin.usersuffix.command;
 
+import cc.carm.lib.easyplugin.utils.ColorParser;
+import com.artformgames.core.ArtCore;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
 import com.artformgames.plugin.usersuffix.conf.PluginMessages;
 import com.artformgames.plugin.usersuffix.user.SuffixAccount;
@@ -7,35 +9,68 @@ import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
-import dev.rollczi.litecommands.annotations.optional.OptionalArg;
+import dev.rollczi.litecommands.annotations.join.Join;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.stream.Collectors;
 
 @Command(name = "usersuffix", aliases = "suffix")
 @Permission("usersuffix.use")
 public class UserSuffixCommands {
 
-    @Execute
-    void set(@Context Player player, @Arg String suffix, @OptionalArg String blanketColor) {
-
+    @Execute(name = "clear")
+    void clearSuffix(@Context Player player) {
+        SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
+        account.setContent(null);
+        account.setColor(null);
+        PluginMessages.CLEARED.send(player);
     }
 
-    public static boolean setSuffix(SuffixAccount data, Player player, String color, String suffixText) {
-        String suffix = color + suffixText + color;
-        if (!SuffixAccount.validColor(color)) {
-            PluginMessages.INVALID_COLOR_CODE.send(player);
-        } else if (suffixText.contains("&")) {
+
+    @Execute(name = "content")
+    void setContent(@Context Player player, @Join String content) {
+        if (content.contains("&")) {
             PluginMessages.CONTAIN_COLOR_CODE.send(player);
-        } else if (suffixText.length() > PluginConfig.MAX_LENGTH.getNotNull()) {
-            PluginMessages.TOO_LONG.send(player, PluginConfig.MAX_LENGTH.getNotNull());
-        } else {
-            data.setSuffix(suffixText, ChatColor.getByChar(color));
-            PluginMessages.SUCCESS.send(player, PlaceholderAPI.setPlaceholders(player, "%artessentials_suffix%"));
+            return;
         }
 
-        return true;
+        if (content.contains(" ")) {
+            PluginMessages.NO_SPACE.send(player);
+            return;
+        }
+
+        if (content.length() > PluginConfig.MAX_LENGTH.getNotNull()) {
+            PluginMessages.TOO_LONG.send(player, PluginConfig.MAX_LENGTH.getNotNull());
+            return;
+        }
+
+        if (content.isBlank()) {
+            PluginMessages.TOO_SHORT.send(player);
+            return;
+        }
+
+        SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
+        account.setContent(content.isBlank() ? null : content);
+        PluginMessages.SUCCESS.send(player, account.getSuffix());
+    }
+
+
+    @Execute(name = "color")
+    void setBracketsColor(@Context Player player, @Arg ChatColor color) {
+        if (!color.isColor() || !PluginConfig.ALLOWED_COLORS.contains(color)) {
+            PluginMessages.INVALID_COLOR_CODE.send(player);
+            String colors = PluginConfig.ALLOWED_COLORS.copy().stream()
+                    .map(c -> "&" + c.getChar() + c.name())
+                    .collect(Collectors.joining(", "));
+            player.sendMessage(ColorParser.parse(colors));
+            return;
+        }
+
+        SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
+        account.setColor(color);
+        PluginMessages.SUCCESS.send(player, account.getSuffix());
     }
 
 }

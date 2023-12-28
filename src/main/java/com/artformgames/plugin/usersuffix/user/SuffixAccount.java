@@ -58,8 +58,8 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
                 .replace("%(suffix)", this.content));
     }
 
-    protected @NotNull String getColorCode() {
-        return this.color != null ? "&" + this.color.getChar() : PluginConfig.DEFAULT_COLOR.getNotNull();
+    public @NotNull String getColorCode() {
+        return this.color != null ? "&" + this.color.getChar() : "&" + PluginConfig.DEFAULT_COLOR.getNotNull().getChar();
     }
 
     public void setSuffix(@Nullable String content, @Nullable ChatColor color) {

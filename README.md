@@ -24,12 +24,16 @@ see  [Dependencies](https://github.com/ArtformGames/UserSuffix/network/dependenc
 
 ## Commands
 
-The main command is `/UserSuffix` or `/title`.
+The main command is `/UserSuffix` or `/suffix`.
 
 ```text
-# set <Content> [Color]
+# content <Content>
 @ User command
-- Set the title of yourself.
+- Set the content of your suffix.
+
+# color <brackets-Color>
+@User command
+- Set the brackets color of your suffix.
 ```
 
 ## Configurations
