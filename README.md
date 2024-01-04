@@ -19,7 +19,6 @@ Simple user title plugin, support customizing titles by commands.
 ## Dependencies
 
 - **[Necessary]** Develop based on [ArtCore](https://github.com/ArtformGames/ArtCore) .
-- **[Necessary]** Suffix based on [LuckPerms]() .
 - **[Recommend]** Placeholders based on [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) .
 
 For development dependencies, please
