@@ -10,6 +10,7 @@ import com.artformgames.plugin.usersuffix.conf.PluginMessages;
 import com.artformgames.plugin.usersuffix.hooker.SuffixPlaceholder;
 import com.artformgames.plugin.usersuffix.user.SuffixLoader;
 import dev.rollczi.litecommands.LiteCommands;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
@@ -40,13 +41,17 @@ public class Main extends EasyPlugin {
         this.commands = ArtCore.createCommand().commands(UserSuffixCommands.class).build();
         this.commands.register();
 
+        if (PluginConfig.METRICS.getNotNull()) {
+            log("Initializing bStats...");
+            new Metrics(this, 20648);
+        }
+
         if (PluginConfig.CHECK_UPDATE.getNotNull()) {
             log("Start to check the plugin versions...");
             getScheduler().runAsync(GHUpdateChecker.runner(this));
         } else {
             log("Version checker is disabled, skipped.");
         }
-
 
         log("Register placeholders...");
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {

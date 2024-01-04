@@ -55,7 +55,7 @@ Will be generated on the first boot up.
 
 ## Statistics
 
-[![bStats](https://bstats.org/signatures/bukkit/TemplatePlugin.svg)](https://bstats.org/plugin/bukkit/TemplatePlugin/18946)
+[![bStats](https://bstats.org/signatures/bukkit/UserSuffix.svg)](https://bstats.org/plugin/bukkit/UserSuffix/20648)
 
 ## Open Source Licence
 

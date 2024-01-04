@@ -12,6 +12,14 @@ public interface PluginConfig extends Configuration {
     ConfiguredValue<Boolean> DEBUG = ConfiguredValue.of(false);
 
     @HeaderComment({
+            "Statistics Settings",
+            "This option is used to help developers count plug-in versions and usage, and it will never affect performance and user experience.",
+            "Of course, you can also choose to turn it off here for this plugin,",
+            "or turn it off for all plugins in the configuration file under \"plugins/bStats\"."
+    })
+    ConfiguredValue<Boolean> METRICS = ConfiguredValue.of(Boolean.class, true);
+
+    @HeaderComment({
             "Check update settings",
             "This option is used by the plug-in to determine whether to check for updates.",
             "If you do not want the plug-in to check for updates and prompt you, you can choose to close.",
