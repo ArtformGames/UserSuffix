@@ -12,7 +12,6 @@ api-version: 1.16
 
 depend:
   - ArtCore
-  - LuckPerms
 
 softdepend:
   - PlaceholderAPI

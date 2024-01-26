@@ -53,9 +53,9 @@ public class Main extends EasyPlugin {
             log("Version checker is disabled, skipped.");
         }
 
-        log("Register placeholders...");
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new SuffixPlaceholder(this, getName());
+            log("Register placeholders...");
+            new SuffixPlaceholder(this, getName()).register();
         } else {
             log("PlaceholderAPI is not enabled, skipped.");
         }

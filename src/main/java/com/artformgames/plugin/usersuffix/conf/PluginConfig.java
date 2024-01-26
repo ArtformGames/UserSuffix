@@ -3,7 +3,9 @@ package com.artformgames.plugin.usersuffix.conf;
 import cc.carm.lib.configuration.core.Configuration;
 import cc.carm.lib.configuration.core.annotation.HeaderComment;
 import cc.carm.lib.configuration.core.value.ConfigValue;
+import cc.carm.lib.configuration.core.value.impl.ConfigValueMap;
 import cc.carm.lib.configuration.core.value.type.ConfiguredList;
+import cc.carm.lib.configuration.core.value.type.ConfiguredMap;
 import cc.carm.lib.configuration.core.value.type.ConfiguredValue;
 import org.bukkit.ChatColor;
 
@@ -49,7 +51,12 @@ public interface PluginConfig extends Configuration {
                     ChatColor.YELLOW, ChatColor.WHITE
             ).build();
 
-    @HeaderComment("Maximum length of the suffix (excluding color symbols)")
-    ConfigValue<Integer> MAX_LENGTH = ConfiguredValue.of(8);
+    @HeaderComment("Maximum length of the suffix of each permissions (excluding color symbols)")
+    ConfiguredMap<Integer, String> MAX_LENGTH = ConfigValueMap.builderOf(Integer.class, String.class)
+            .asLinkedMap().fromString().parseKey(Integer::parseInt).parseValue(Object::toString)
+            .defaults(m -> {
+                m.put(8, "usersuffix.use");
+                m.put(12, "group.vip");
+            }).build();
 
 }

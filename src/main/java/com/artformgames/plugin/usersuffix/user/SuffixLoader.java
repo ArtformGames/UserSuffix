@@ -18,7 +18,7 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
 
     protected SQLTable table = SQLTable.of("user_suffix", builder -> {
         builder.addColumn("user", "INT UNSIGNED NOT NULL PRIMARY KEY");
-        builder.addColumn("suffix", "VARCHAR(16)");
+        builder.addColumn("content", "VARCHAR(255)");
         builder.addColumn("color", "CHAR(1)");
     });
 
@@ -43,9 +43,9 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
                 .setLimit(1).build().execute()) {
             ResultSet rs = query.getResultSet();
             if (rs.next()) {
-                String suffix = rs.getString("suffix");
+                String content = rs.getString("content");
                 String color = rs.getString("color");
-                return new SuffixAccount(user, suffix, color == null ? null : ChatColor.getByChar(color.charAt(0)));
+                return new SuffixAccount(user, content, color == null ? null : ChatColor.getByChar(color.charAt(0)));
             }
         }
         return null;
@@ -57,7 +57,7 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
             table.createDelete().addCondition("user", user.id()).build().execute();
         } else {
             table.createInsert()
-                    .setColumnNames("user", "suffix", "color")
+                    .setColumnNames("user", "content", "color")
                     .setParams(
                             user.id(), handler.getContent(),
                             handler.getColor() == null ? null : handler.getColor().getChar()

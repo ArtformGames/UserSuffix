@@ -14,6 +14,7 @@ import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Command(name = "usersuffix", aliases = "suffix")
@@ -31,8 +32,12 @@ public class UserSuffixCommands {
 
     @Execute(name = "content")
     void setContent(@Context Player player, @Join String content) {
-        if (content.contains("&")) {
-            PluginMessages.CONTAIN_COLOR_CODE.send(player);
+        int maxLength = PluginConfig.MAX_LENGTH.entrySet().stream()
+                .filter(e -> player.hasPermission(e.getValue()))
+                .mapToInt(Map.Entry::getKey).max().orElse(-1);
+
+        if (maxLength <= 0) {
+            PluginMessages.NO_PERMISSION.send(player);
             return;
         }
 
@@ -41,7 +46,8 @@ public class UserSuffixCommands {
             return;
         }
 
-        if (content.length() > PluginConfig.MAX_LENGTH.getNotNull()) {
+
+        if (ColorParser.clear(content).length() > maxLength) {
             PluginMessages.TOO_LONG.send(player, PluginConfig.MAX_LENGTH.getNotNull());
             return;
         }
