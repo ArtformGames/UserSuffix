@@ -11,11 +11,9 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.join.Join;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Command(name = "usersuffix", aliases = "suffix")
 @Permission("usersuffix.use")
@@ -28,7 +26,6 @@ public class UserSuffixCommands {
         account.setColor(null);
         PluginMessages.CLEARED.send(player);
     }
-
 
     @Execute(name = "content")
     void setContent(@Context Player player, @Join String content) {
@@ -46,31 +43,26 @@ public class UserSuffixCommands {
             return;
         }
 
-
         if (ColorParser.clear(content).length() > maxLength) {
             PluginMessages.TOO_LONG.send(player, PluginConfig.MAX_LENGTH.getNotNull());
             return;
         }
 
-        if (content.isBlank()) {
+        if (ColorParser.clear(content).isBlank()) {
             PluginMessages.TOO_SHORT.send(player);
             return;
         }
 
         SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
-        account.setContent(content.isBlank() ? null : content);
+        account.setContent(content);
         PluginMessages.SUCCESS.send(player, account.getSuffix());
     }
 
 
     @Execute(name = "color")
-    void setBracketsColor(@Context Player player, @Arg ChatColor color) {
-        if (!color.isColor() || !PluginConfig.ALLOWED_COLORS.contains(color)) {
+    void setBracketsColor(@Context Player player, @Arg String color) {
+        if (!SuffixAccount.validColor(color)) {
             PluginMessages.INVALID_COLOR_CODE.send(player);
-            String colors = PluginConfig.ALLOWED_COLORS.copy().stream()
-                    .map(c -> "&" + c.getChar() + c.name())
-                    .collect(Collectors.joining(", "));
-            player.sendMessage(ColorParser.parse(colors));
             return;
         }
 

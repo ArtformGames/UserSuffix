@@ -36,14 +36,10 @@ public interface PluginMessages extends Messages {
             .defaults("&fSuffix should not contain spaces.")
             .build();
 
-    ConfiguredMessageList<BaseComponent[]> CONTAIN_COLOR_CODE = Messages.list()
-            .defaults("&fYou can't include color codes directly in your suffix!")
-            .build();
-
     ConfiguredMessageList<BaseComponent[]> INVALID_COLOR_CODE = Messages.list()
             .defaults(
-                    "&fYour color is invalid!",
-                    "&fYou can choose from the following colors:"
+                    "&fYour input color is invalid!",
+                    "&fPlease use &e&l#xxxxxx &for RGB color code or &e&l&0-9a-fk-or &ffor color code."
             ).build();
 
 

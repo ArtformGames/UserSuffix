@@ -6,26 +6,28 @@ import com.artformgames.core.user.handler.AbstractUserHandler;
 import com.artformgames.core.user.handler.UserHandler;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class SuffixAccount extends AbstractUserHandler implements UserHandler {
-    public static final Pattern ALLOWED_CODES = Pattern.compile("[\\da-f]+");
+
+    // Allow colors and hex codes(starting with #)
+    public static final Pattern ALLOWED_CODES = Pattern.compile("(&[0-9a-fk-or]|#[0-9a-fA-F]{6})");
 
     public static boolean validColor(String code) {
         return ALLOWED_CODES.matcher(code).matches();
     }
 
-
     protected @Nullable String content;
-    protected @Nullable ChatColor color;
+    protected @Nullable String color;
 
-    public SuffixAccount(User user, @Nullable String content, @Nullable ChatColor color) {
+    public SuffixAccount(User user, @Nullable String content, @Nullable String color) {
         super(user);
         this.content = content;
         this.color = color;
@@ -35,7 +37,7 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
         return Optional.ofNullable(Bukkit.getPlayer(getUser().getUserUUID()));
     }
 
-    public @Nullable ChatColor getColor() {
+    public @Nullable String getColor() {
         return color;
     }
 
@@ -43,7 +45,7 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
         return content;
     }
 
-    public void setColor(@Nullable ChatColor color) {
+    public void setColor(@Nullable String color) {
         this.color = color;
     }
 
@@ -59,10 +61,18 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
     }
 
     public @NotNull String getColorCode() {
-        return this.color != null ? "&" + this.color.getChar() : "&" + PluginConfig.DEFAULT_COLOR.getNotNull().getChar();
+        String colorContent = Optional.ofNullable(this.color).orElse(PluginConfig.DEFAULT_COLOR.getNotNull());
+
+        if (colorContent.startsWith("#")) {
+            String v = colorContent.substring(1);
+            return Arrays.stream(v.split("")).map(s -> '§' + s)
+                    .collect(Collectors.joining("", '§' + "x", ""));
+        } else {
+            return '§' + colorContent;
+        }
     }
 
-    public void setSuffix(@Nullable String content, @Nullable ChatColor color) {
+    public void setSuffix(@Nullable String content, @Nullable String color) {
         this.content = content;
         this.color = color;
     }

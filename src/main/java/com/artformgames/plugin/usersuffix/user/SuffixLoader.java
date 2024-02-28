@@ -6,7 +6,6 @@ import com.artformgames.core.ArtCore;
 import com.artformgames.core.user.User;
 import com.artformgames.core.user.UserKey;
 import com.artformgames.core.user.handler.UserHandlerLoader;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +44,7 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
             if (rs.next()) {
                 String content = rs.getString("content");
                 String color = rs.getString("color");
-                return new SuffixAccount(user, content, color == null ? null : ChatColor.getByChar(color.charAt(0)));
+                return new SuffixAccount(user, content, color == null || !SuffixAccount.validColor(color) ? null : color);
             }
         }
         return null;
@@ -53,16 +52,12 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
 
     @Override
     public void saveData(UserKey user, SuffixAccount handler) throws Exception {
-        if (handler.getContent() == null || handler.getContent().isEmpty()) {
-            table.createDelete().addCondition("user", user.id()).build().execute();
-        } else {
-            table.createInsert()
-                    .setColumnNames("user", "content", "color")
-                    .setParams(
-                            user.id(), handler.getContent(),
-                            handler.getColor() == null ? null : handler.getColor().getChar()
-                    ).execute();
-        }
+        table.createReplace()
+                .setColumnNames("user", "content", "color")
+                .setParams(
+                        user.id(), handler.getContent(),
+                        handler.getColor() == null ? null : handler.getColor()
+                ).execute();
     }
 
 }
