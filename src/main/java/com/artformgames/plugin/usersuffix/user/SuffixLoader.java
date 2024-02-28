@@ -18,7 +18,7 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
     protected SQLTable table = SQLTable.of("user_suffix", builder -> {
         builder.addColumn("user", "INT UNSIGNED NOT NULL PRIMARY KEY");
         builder.addColumn("content", "VARCHAR(255)");
-        builder.addColumn("color", "CHAR(1)");
+        builder.addColumn("color", "VARCHAR(7)");
     });
 
     public SuffixLoader(@NotNull Plugin plugin) {
