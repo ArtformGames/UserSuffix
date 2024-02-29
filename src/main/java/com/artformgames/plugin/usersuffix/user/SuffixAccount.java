@@ -10,8 +10,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,11 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
 
     // Allow colors and hex codes(starting with #)
     public static final Pattern ALLOWED_CODES = Pattern.compile("(&[0-9a-fk-or]|#[0-9a-fA-F]{6})");
+    public static final NumberFormat FORMAT = NumberFormat.getInstance();
+
+    static {
+        FORMAT.setMaximumFractionDigits(2);
+    }
 
     public static boolean validColor(String code) {
         return ALLOWED_CODES.matcher(code).matches();
@@ -26,6 +33,8 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
 
     protected @Nullable String content;
     protected @Nullable String color;
+
+    protected long lastChange = -1;
 
     public SuffixAccount(User user, @Nullable String content, @Nullable String color) {
         super(user);
@@ -72,9 +81,22 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
         }
     }
 
-    public void setSuffix(@Nullable String content, @Nullable String color) {
+    public CompletableFuture<Void> setSuffix(@Nullable String content, @Nullable String color) {
+        this.lastChange = System.currentTimeMillis();
         this.content = content;
         this.color = color;
+        return SuffixLoader.TABLE.createReplace()
+                .setColumnNames("user", "content", "color")
+                .setParams(user.getID(), content, color)
+                .executeFuture();
+    }
+
+    public boolean isCoolingDown() {
+        return lastChange > 0 && System.currentTimeMillis() - lastChange < PluginConfig.COOLDOWN.getNotNull();
+    }
+
+    public String getCoolDownSeconds() {
+        return FORMAT.format((lastChange + PluginConfig.COOLDOWN.getNotNull() - System.currentTimeMillis()) / 1000);
     }
 
 }

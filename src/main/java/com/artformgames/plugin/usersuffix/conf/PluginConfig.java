@@ -27,6 +27,9 @@ public interface PluginConfig extends Configuration {
     })
     ConfiguredValue<Boolean> CHECK_UPDATE = ConfiguredValue.of(true);
 
+    @HeaderComment("Cooldown time for content change, in milliseconds.")
+    ConfiguredValue<Long> COOLDOWN = ConfiguredValue.of(1000L);
+
     @HeaderComment({"Suffix format. The `%(suffix)` will be replaced with the suffix content."})
     ConfigValue<String> FORMAT = ConfiguredValue.of(" %(color)[%(suffix)%(color)]");
 

@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
 
-    protected SQLTable table = SQLTable.of("user_suffix", builder -> {
+    public static final SQLTable TABLE = SQLTable.of("user_suffix", builder -> {
         builder.addColumn("user", "INT UNSIGNED NOT NULL PRIMARY KEY");
         builder.addColumn("content", "VARCHAR(255)");
         builder.addColumn("color", "VARCHAR(7)");
@@ -24,7 +24,7 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
     public SuffixLoader(@NotNull Plugin plugin) {
         super(plugin, SuffixAccount.class);
         try {
-            table.create(ArtCore.getSQLManager());
+            TABLE.create(ArtCore.getSQLManager());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,7 +37,7 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
 
     @Override
     public @Nullable SuffixAccount loadData(User user) throws Exception {
-        try (SQLQuery query = table.createQuery()
+        try (SQLQuery query = TABLE.createQuery()
                 .addCondition("user", user.getID())
                 .setLimit(1).build().execute()) {
             ResultSet rs = query.getResultSet();
@@ -52,12 +52,7 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
 
     @Override
     public void saveData(UserKey user, SuffixAccount handler) throws Exception {
-        table.createReplace()
-                .setColumnNames("user", "content", "color")
-                .setParams(
-                        user.id(), handler.getContent(),
-                        handler.getColor() == null ? null : handler.getColor()
-                ).execute();
+        // Do nothing
     }
 
 }

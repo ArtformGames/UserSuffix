@@ -27,8 +27,20 @@ public class UserSuffixCommands {
         PluginMessages.CLEARED.send(player);
     }
 
-    @Execute(name = "content")
-    void setContent(@Context Player player, @Join String content) {
+    @Execute(name = "set")
+    void setContent(@Context Player player, @Arg("format-color") String formatColor, @Join String content) {
+        SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
+
+        if (account.isCoolingDown()) {
+            PluginMessages.COOLING.send(player, account.getCoolDownSeconds());
+            return;
+        }
+
+        if (!SuffixAccount.validColor(formatColor)) {
+            PluginMessages.INVALID_COLOR_CODE.send(player);
+            return;
+        }
+
         int maxLength = PluginConfig.MAX_LENGTH.entrySet().stream()
                 .filter(e -> player.hasPermission(e.getValue()))
                 .mapToInt(Map.Entry::getKey).max().orElse(-1);
@@ -53,21 +65,7 @@ public class UserSuffixCommands {
             return;
         }
 
-        SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
-        account.setContent(content);
-        PluginMessages.SUCCESS.send(player, account.getSuffix());
-    }
-
-
-    @Execute(name = "color")
-    void setBracketsColor(@Context Player player, @Arg String color) {
-        if (!SuffixAccount.validColor(color)) {
-            PluginMessages.INVALID_COLOR_CODE.send(player);
-            return;
-        }
-
-        SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
-        account.setColor(color);
+        account.setSuffix(content, formatColor);
         PluginMessages.SUCCESS.send(player, account.getSuffix());
     }
 

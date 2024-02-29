@@ -23,6 +23,12 @@ public interface PluginMessages extends Messages {
             .defaults("&fYour suffix contains at least one character (excluding colors).")
             .build();
 
+    ConfiguredMessageList<BaseComponent[]> COOLING = Messages.list()
+            .defaults("&c&lHold on! &fYou can't change your suffix so fast, please wait &e%(time)&f seconds for next change.")
+            .params("time")
+            .build();
+
+
     ConfiguredMessageList<BaseComponent[]> SUCCESS = Messages.list()
             .defaults("&fSuccessfully modified your suffix to &r%(suffix) &f.")
             .params("suffix")
@@ -38,7 +44,7 @@ public interface PluginMessages extends Messages {
 
     ConfiguredMessageList<BaseComponent[]> INVALID_COLOR_CODE = Messages.list()
             .defaults(
-                    "&fYour input color is invalid!",
+                    "&fYour input format color is invalid!",
                     "&fPlease use &e&l#xxxxxx &for RGB color code or &e&l&0-9a-fk-or &ffor color code."
             ).build();
 
