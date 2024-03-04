@@ -49,7 +49,7 @@ public class LuckPermsMigrator {
                 String username = getUsername(usersTable, uuid);
                 if (username == null) continue;
 
-                indexList.add(rs.getInt("id");
+                indexList.add(rs.getInt("id"));
                 data.add(new MigrateCache(importKey(uuid, username), content, formatColor));
             }
         } catch (Exception ex) {
