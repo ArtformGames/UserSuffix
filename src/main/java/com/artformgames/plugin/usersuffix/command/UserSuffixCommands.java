@@ -4,6 +4,7 @@ import cc.carm.lib.easyplugin.utils.ColorParser;
 import com.artformgames.core.ArtCore;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
 import com.artformgames.plugin.usersuffix.conf.PluginMessages;
+import com.artformgames.plugin.usersuffix.migrator.LuckPermsMigrator;
 import com.artformgames.plugin.usersuffix.user.SuffixAccount;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -11,7 +12,9 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.join.Join;
 import dev.rollczi.litecommands.annotations.permission.Permission;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -60,6 +63,11 @@ public class UserSuffixCommands {
             return;
         }
 
+        if (content.length() > 200) {
+            PluginMessages.TOO_LONG.send(player, 200);
+            return;
+        }
+
         if (ColorParser.clear(content).isBlank()) {
             PluginMessages.TOO_SHORT.send(player);
             return;
@@ -67,6 +75,18 @@ public class UserSuffixCommands {
 
         account.setSuffix(content, formatColor);
         PluginMessages.SUCCESS.send(player, account.getSuffix());
+    }
+
+    @Execute(name = "migrate luckperms")
+    void importLuckPerms(@Context ConsoleCommandSender sender,
+                         @NotNull String sourceTable, @NotNull String usersTable, boolean purge) {
+        try {
+            int count = LuckPermsMigrator.importData(sourceTable, usersTable, purge);
+            sender.sendMessage("Successfully imported " + count + " suffixes from LuckPerms.");
+        } catch (Exception ex) {
+            sender.sendMessage("An error occurred while importing suffixes from LuckPerms!");
+            ex.printStackTrace();
+        }
     }
 
 }
