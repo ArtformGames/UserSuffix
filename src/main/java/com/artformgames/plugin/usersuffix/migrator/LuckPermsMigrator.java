@@ -3,7 +3,6 @@ package com.artformgames.plugin.usersuffix.migrator;
 import cc.carm.lib.easysql.api.SQLQuery;
 import com.artformgames.core.ArtCore;
 import com.artformgames.core.user.UserKey;
-import com.artformgames.plugin.usersuffix.user.SuffixAccount;
 import com.artformgames.plugin.usersuffix.user.SuffixLoader;
 
 import java.sql.ResultSet;
@@ -15,6 +14,10 @@ import java.util.regex.Pattern;
 
 public class LuckPermsMigrator {
 
+    public record CachedRecord(UserKey user,
+                               String content, String formatColor) {
+    }
+
     // REGEX For  suffix.<weight>.<content>
     public static final Pattern PATTERN = Pattern.compile("^suffix\\.\\d+\\.(.*)$");
 
@@ -25,7 +28,7 @@ public class LuckPermsMigrator {
 
     public static int importData(String sourceTable, String usersTable, boolean purge) {
         Set<Integer> indexList = new HashSet<>();
-        Set<MigrateCache> data = new HashSet<>();
+        Set<CachedRecord> data = new HashSet<>();
         try (SQLQuery query = ArtCore.getSQLManager().createQuery().inTable(sourceTable)
                 .selectColumns("id", "uuid", "permission")
                 .build().execute()) {
@@ -49,15 +52,18 @@ public class LuckPermsMigrator {
                 String username = getUsername(usersTable, uuid);
                 if (username == null) continue;
 
+                UserKey key = importKey(uuid, username);
+                if (key == null) continue;
+
                 indexList.add(rs.getInt("id"));
-                data.add(new MigrateCache(importKey(uuid, username), content, formatColor));
+                data.add(new CachedRecord(key, content, formatColor));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             return -1;
         }
 
-        for (MigrateCache cache : data) { // Insert data into the new table
+        for (CachedRecord cache : data) { // Insert data into the new table
             SuffixLoader.TABLE.createReplace()
                     .setColumnNames("user", "content", "color")
                     .setParams(cache.user().id(), cache.content(), cache.content())
@@ -92,7 +98,11 @@ public class LuckPermsMigrator {
     }
 
     public static UserKey importKey(UUID uuid, String username) {
-        return ArtCore.getUserManager().getKey(uuid);
+        try {
+            return ArtCore.getUserManager().upsertKey(uuid, username);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 
