@@ -1,5 +1,6 @@
 package com.artformgames.plugin.usersuffix.migrator;
 
+import cc.carm.lib.easyplugin.utils.ColorParser;
 import cc.carm.lib.easysql.api.SQLQuery;
 import com.artformgames.core.ArtCore;
 import com.artformgames.core.user.UserKey;
@@ -12,10 +13,24 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LuckPermsMigrator {
+public class ArtEssMigrator {
 
     public record CachedRecord(UserKey user,
                                String content, String formatColor) {
+
+        public String color() {
+
+            Matcher hexMatcher = ColorParser.HEX_PATTERN.matcher(formatColor());
+            if (hexMatcher.find()) return "#" + hexMatcher.group(1);
+
+            Matcher colorMatcher = ColorParser.COLOR_PATTERN.matcher(formatColor());
+            if (colorMatcher.matches()) {
+                return formatColor.replace("&", "");
+            }
+
+            return null;
+        }
+
     }
 
     // REGEX For  suffix.<weight>.<content>
@@ -50,7 +65,7 @@ public class LuckPermsMigrator {
                 if (content == null && formatColor == null) continue;
 
                 String username = getUsername(usersTable, uuid);
-                if (username == null) continue;
+                if (username == null || username.equals("null")) continue;
 
                 UserKey key = importKey(uuid, username);
                 if (key == null) continue;
@@ -66,7 +81,7 @@ public class LuckPermsMigrator {
         for (CachedRecord cache : data) { // Insert data into the new table
             SuffixLoader.TABLE.createReplace()
                     .setColumnNames("user", "content", "color")
-                    .setParams(cache.user().id(), cache.content(), cache.content())
+                    .setParams(cache.user().id(), cache.content(), cache.color())
                     .execute(null);
         }
 

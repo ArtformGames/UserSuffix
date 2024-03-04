@@ -4,7 +4,7 @@ import cc.carm.lib.easyplugin.utils.ColorParser;
 import com.artformgames.core.ArtCore;
 import com.artformgames.plugin.usersuffix.conf.PluginConfig;
 import com.artformgames.plugin.usersuffix.conf.PluginMessages;
-import com.artformgames.plugin.usersuffix.migrator.LuckPermsMigrator;
+import com.artformgames.plugin.usersuffix.migrator.ArtEssMigrator;
 import com.artformgames.plugin.usersuffix.user.SuffixAccount;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -12,9 +12,9 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.join.Join;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import org.bukkit.command.ConsoleCommandSender;
+import jdk.jfr.Description;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -77,11 +77,13 @@ public class UserSuffixCommands {
         PluginMessages.SUCCESS.send(player, account.getSuffix());
     }
 
-    @Execute(name = "migrate luckperms")
-    void importLuckPerms(@Context ConsoleCommandSender sender,
-                         @NotNull String sourceTable, @NotNull String usersTable, boolean purge) {
+    @Execute(name = "import")
+    @Description("Import suffixes from ArtEssentials(outdated).")
+    @Permission("usersuffix.admin")
+    void importLuckPerms(@Context CommandSender sender,
+                         @Arg("perms-table") String sourceTable, @Arg("users-table") String usersTable, @Arg boolean purge) {
         try {
-            int count = LuckPermsMigrator.importData(sourceTable, usersTable, purge);
+            int count = ArtEssMigrator.importData(sourceTable, usersTable, purge);
             sender.sendMessage("Successfully imported " + count + " suffixes from LuckPerms.");
         } catch (Exception ex) {
             sender.sendMessage("An error occurred while importing suffixes from LuckPerms!");

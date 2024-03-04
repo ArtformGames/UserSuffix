@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class SuffixAccount extends AbstractUserHandler implements UserHandler {
 
     // Allow colors and hex codes(starting with #)
-    public static final Pattern ALLOWED_CODES = Pattern.compile("(&[0-9a-fk-or]|#[0-9a-fA-F]{6})");
+    public static final Pattern ALLOWED_CODES = Pattern.compile("([0-9a-fk-or]|#[0-9a-fA-F]{6})");
     public static final NumberFormat FORMAT = NumberFormat.getInstance();
 
     static {

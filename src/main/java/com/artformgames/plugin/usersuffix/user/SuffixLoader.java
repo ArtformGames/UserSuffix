@@ -44,7 +44,10 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
             if (rs.next()) {
                 String content = rs.getString("content");
                 String color = rs.getString("color");
-                return new SuffixAccount(user, content, color == null || !SuffixAccount.validColor(color) ? null : color);
+                if (color != null && !SuffixAccount.validColor(color)) {
+                    color = null;
+                }
+                return new SuffixAccount(user, content, color);
             }
         }
         return null;

@@ -19,3 +19,5 @@ softdepend:
 permissions:
   "usersuffix.use":
     default: true
+  "usersuffix.admin":
+    default: op
