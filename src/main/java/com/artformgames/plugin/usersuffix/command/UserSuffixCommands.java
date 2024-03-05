@@ -25,8 +25,7 @@ public class UserSuffixCommands {
     @Execute(name = "clear")
     void clearSuffix(@Context Player player) {
         SuffixAccount account = ArtCore.getHandler(player, SuffixAccount.class);
-        account.setContent(null);
-        account.setColor(null);
+        account.setSuffix(null, null);
         PluginMessages.CLEARED.send(player);
     }
 

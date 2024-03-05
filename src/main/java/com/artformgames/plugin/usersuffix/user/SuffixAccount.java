@@ -54,14 +54,6 @@ public class SuffixAccount extends AbstractUserHandler implements UserHandler {
         return content;
     }
 
-    public void setColor(@Nullable String color) {
-        this.color = color;
-    }
-
-    public void setContent(@Nullable String content) {
-        this.content = content;
-    }
-
     public @Nullable String getSuffix() {
         if (this.content == null) return null;
         return ColorParser.parse(PluginConfig.FORMAT.getNotNull()
