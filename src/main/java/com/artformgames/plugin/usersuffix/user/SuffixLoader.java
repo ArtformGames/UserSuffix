@@ -6,12 +6,14 @@ import com.artformgames.core.ArtCore;
 import com.artformgames.core.user.User;
 import com.artformgames.core.user.UserKey;
 import com.artformgames.core.user.handler.UserHandlerLoader;
+import com.artformgames.plugin.usersuffix.Main;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
 
 public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
 
@@ -28,6 +30,14 @@ public class SuffixLoader extends UserHandlerLoader<SuffixAccount> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public @NotNull CompletableFuture<SuffixAccount> load(@NotNull User user) {
+        return super.load(user).thenApply(acc -> {
+            Main.debugging("Loaded suffix data for user: " + user.getUsername() + " - " + acc.color + " " + acc.content + " (at " + acc.lastChange + ")");
+            return acc;
+        });
     }
 
     @Override
